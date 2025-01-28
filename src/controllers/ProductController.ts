@@ -1,44 +1,38 @@
-import type { Request, Response, NextFunction } from "express"
-import ProductService from "../services/ProductService"
-import CsvService from "../services/CsvService"
-import Logger from "../utils/logger"
+import { Request, Response } from 'express';
+import { ProductService } from '../services/ProductService';
+import { logger } from '../utils/logger';
 
-class ProductController {
-  async getProducts(req: Request, res: Response, next: NextFunction) {
+export class ProductController {
+  private productService: ProductService;
+
+  constructor() {
+    this.productService = new ProductService();
+  }
+
+  async importProducts(req: Request, res: Response): Promise<void> {
     try {
-      const products = await ProductService.getProducts(req.query)
-      res.json(products)
+      const filePath = req.file?.path;
+      if (!filePath) {
+        res.status(400).json({ error: 'No file uploaded' });
+        return;
+      }
+
+      await this.productService.importProductsFromCSV(filePath);
+      res.status(200).json({ message: 'Products imported successfully' });
     } catch (error) {
-      Logger.error("Error in getProducts", { error })
-      next(error)
+      logger.error('Error importing products:', error);
+      res.status(500).json({ error: 'Error importing products' });
     }
   }
 
-  async uploadCsv(req: Request, res: Response, next: NextFunction) {
+  async getProducts(req: Request, res: Response): Promise<void> {
     try {
-      if (!req.file) {
-        throw new Error("No file uploaded")
-      }
-
-      const products = await CsvService.parseCsvFile(req.file)
-
-      if (products.length === 0) {
-        throw new Error("No valid products found in the CSV file")
-      }
-
-      const savedProducts = await ProductService.bulkCreateProducts(products)
-
-      res.status(201).json({
-        message: "CSV file processed successfully",
-        productsCreated: savedProducts.length,
-        totalRowsProcessed: products.length,
-      })
+      const filters = req.query;
+      const products = await this.productService.getProducts(filters);
+      res.status(200).json(products);
     } catch (error) {
-      Logger.error("Error in uploadCsv", { error })
-      next(error)
+      logger.error('Error fetching products:', error);
+      res.status(500).json({ error: 'Error fetching products' });
     }
   }
 }
-
-export default new ProductController()
-

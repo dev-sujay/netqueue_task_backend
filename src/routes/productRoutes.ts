@@ -1,13 +1,12 @@
-import express from "express"
-import ProductController from "../controllers/ProductController"
-import { validateFilters } from "../middleware/validation"
-import multer from "multer"
+import express from 'express';
+import multer from 'multer';
+import { ProductController } from '../controllers/ProductController';
 
-const router = express.Router()
-const upload = multer({ storage: multer.memoryStorage() })
+const router = express.Router();
+const upload = multer({ dest: 'uploads/' });
+const productController = new ProductController();
 
-router.get("/", validateFilters, ProductController.getProducts)
-router.post("/upload", upload.single("csv"), ProductController.uploadCsv)
+router.post('/import', upload.single('file'), (req, res) => productController.importProducts(req, res));
+router.get('/', (req, res) => productController.getProducts(req, res));
 
-export default router
-
+export default router;

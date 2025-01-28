@@ -1,22 +1,20 @@
-# Product Filter API
+# E-commerce Platform
 
-This is a Node.js REST API for fetching, filtering, and uploading products based on a provided CSV data file. It uses MongoDB for data storage and provides extensive filtering and search capabilities.
+This is a Node.js-based e-commerce platform with product management and search capabilities. It uses TypeScript, Express.js, MongoDB with Mongoose, and follows the MVC (Model-View-Controller) pattern.
 
-## Features
+## Table of Contents
 
-- Fetch all products
-- Filter products by various criteria (category, price range, availability, condition, brand)
-- Full-text search functionality
-- Sorting and pagination
-- CSV file upload to populate the database
-- MVC architecture with services layer
-- Class-based controllers
-- Validation using Joi
-- Error handling middleware
-- Test cases using Jest and Supertest
+1. [Installation](#installation)
+2. [Project Structure](#project-structure)
+3. [Environment Variables](#environment-variables)
+4. [Models](#models)
+5. [Services](#services)
+6. [Controllers](#controllers)
+7. [Routes](#routes)
+8. [Middleware](#middleware)
+9. [Utilities](#utilities)
 
 ## Installation
 
-1. Clone the repository
-2. Run `npm install` to install dependencies
-3. Create a `.env` file in the root directory and add your MongoDB connection string:
+1. Clone the repository:
+

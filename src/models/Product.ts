@@ -1,68 +1,86 @@
-import mongoose, { type Document, Schema } from "mongoose"
+import mongoose, { Document, Schema } from 'mongoose';
+import { ICategory } from './Category';
 
-export interface IProduct extends Document {
-  ID: number
-  Type: string
-  SKU: string
-  Name: string
-  Published: number
-  IsFeatured: number
-  VisibilityInCatalog: string
-  ShortDescription: string
-  Description: string
-  TaxStatus: string
-  InStock: number
-  Stock: number
-  SalePrice: number
-  RegularPrice: number
-  Categories: string[]
-  Images: string[]
-  Brand: string
-  Condition: string
-  Gender: string
-  Movement: string
-  GoldColour: string
-  Material: string
+export interface IAttribute {
+  name: string;
+  value: string;
+  visible: boolean;
+  global: boolean;
 }
 
-const ProductSchema: Schema = new Schema({
-  ID: { type: Number, required: true, unique: true },
-  Type: { type: String, required: true },
-  SKU: { type: String, required: true, unique: true },
-  Name: { type: String, required: true },
-  Published: { type: Number, required: true },
-  IsFeatured: { type: Number, required: true },
-  VisibilityInCatalog: { type: String, required: true },
-  ShortDescription: { type: String },
-  Description: { type: String },
-  TaxStatus: { type: String },
-  InStock: { type: Number, required: true },
-  Stock: { type: Number, required: true },
-  SalePrice: { type: Number },
-  RegularPrice: { type: Number, required: true },
-  Categories: [{ type: String }],
-  Images: [{ type: String }],
-  Brand: { type: String },
-  Condition: { type: String },
-  Gender: { type: String },
-  Movement: { type: String },
-  GoldColour: { type: String },
-  Material: { type: String },
-})
+export interface IProduct extends Document {
+  productId: number;
+  type: string;
+  sku: string;
+  name: string;
+  published: boolean;
+  isFeatured: boolean;
+  visibilityInCatalog: string;
+  shortDescription: string;
+  description: string;
+  dateOnSaleTo: Date;
+  dateOnSaleFrom: Date;
+  taxStatus: string;
+  taxClass: string;
+  inStock: boolean;
+  stock: number;
+  lowStockAmount: number;
+  backordersAllowed: boolean;
+  soldIndividually: boolean;
+  weight: number;
+  dimensions: {
+    length: number;
+    width: number;
+    height: number;
+  };
+  allowCustomerReviews: boolean;
+  purchaseNote: string;
+  salePrice: number;
+  regularPrice: number;
+  categories: ICategory['_id'][];
+  tags: string[];
+  images: string[];
+  attributes: IAttribute[];
+}
 
-// Add text index for search functionality
-ProductSchema.index({
-  Name: "text",
-  ShortDescription: "text",
-  Description: "text",
-  Categories: "text",
-  Brand: "text",
-  Condition: "text",
-  Gender: "text",
-  Movement: "text",
-  GoldColour: "text",
-  Material: "text",
-})
+const productSchema = new Schema<IProduct>({
+  productId: { type: Number, required: true, unique: true },
+  type: { type: String, required: true },
+  sku: { type: String, required: true, unique: true },
+  name: { type: String, required: true },
+  published: { type: Boolean, default: true },
+  isFeatured: { type: Boolean, default: false },
+  visibilityInCatalog: { type: String, enum: ['visible', 'catalog', 'search', 'hidden'], default: 'visible' },
+  shortDescription: String,
+  description: String,
+  dateOnSaleTo: Date,
+  dateOnSaleFrom: Date,
+  taxStatus: { type: String, enum: ['taxable', 'shipping', 'none'], default: 'taxable' },
+  taxClass: String,
+  inStock: { type: Boolean, default: true },
+  stock: { type: Number, default: 0 },
+  lowStockAmount: Number,
+  backordersAllowed: { type: Boolean, default: false },
+  soldIndividually: { type: Boolean, default: false },
+  weight: Number,
+  dimensions: {
+    length: Number,
+    width: Number,
+    height: Number,
+  },
+  allowCustomerReviews: { type: Boolean, default: true },
+  purchaseNote: String,
+  salePrice: Number,
+  regularPrice: Number,
+  categories: [{ type: Schema.Types.ObjectId, ref: 'Category' }],
+  tags: [String],
+  images: [String],
+  attributes: [{
+    name: String,
+    value: String,
+    visible: { type: Boolean, default: true },
+    global: { type: Boolean, default: true },
+  }],
+}, { timestamps: true });
 
-export default mongoose.model<IProduct>("Product", ProductSchema)
-
+export default mongoose.model<IProduct>('Product', productSchema);
