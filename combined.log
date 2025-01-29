@@ -1,2 +1,30 @@
-{"level":"info","message":"Server is running on port 3000","timestamp":"2025-01-28T14:20:41.678Z"}
-{"level":"info","message":"Connected to MongoDB","timestamp":"2025-01-28T14:20:42.815Z"}
+{"level":"info","message":"Server is running on port 3000","timestamp":"2025-01-29T08:30:51.965Z"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-01-29T08:30:52.689Z"}
+{"level":"info","message":"Server is running on port 3000","timestamp":"2025-01-29T10:55:38.196Z"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-01-29T10:55:38.894Z"}
+{"level":"info","message":"Server is running on port 3000","timestamp":"2025-01-29T10:56:12.654Z"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-01-29T10:56:13.297Z"}
+{"level":"info","message":"Server is running on port 3000","timestamp":"2025-01-29T11:14:06.972Z"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-01-29T11:14:07.708Z"}
+{"level":"info","message":"Server is running on port 3000","timestamp":"2025-01-29T11:14:33.463Z"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-01-29T11:14:34.072Z"}
+{"$clusterTime":{"clusterTime":{"$timestamp":"7465295584476266502"},"signature":{"hash":"JwpCHz6TsM3PmOd2mNA7c8uTFW4=","keyId":{"high":1727600633,"low":20,"unsigned":false}}},"code":2,"codeName":"BadValue","level":"error","message":"Error processing request: unknown operator: $and","ok":0,"operationTime":{"$timestamp":"7465295584476266502"},"stack":"MongoServerError: unknown operator: $and\n    at Connection.onMessage (/Users/sujaypaul/Desktop/projects/netqueue_task_backend/node_modules/mongodb/src/cmap/connection.ts:449:20)\n    at MessageStream.<anonymous> (/Users/sujaypaul/Desktop/projects/netqueue_task_backend/node_modules/mongodb/src/cmap/connection.ts:241:56)\n    at MessageStream.emit (node:events:514:28)\n    at MessageStream.emit (node:domain:488:12)\n    at processIncomingData (/Users/sujaypaul/Desktop/projects/netqueue_task_backend/node_modules/mongodb/src/cmap/message_stream.ts:188:12)\n    at MessageStream._write (/Users/sujaypaul/Desktop/projects/netqueue_task_backend/node_modules/mongodb/src/cmap/message_stream.ts:69:5)\n    at writeOrBuffer (node:internal/streams/writable:556:12)\n    at _write (node:internal/streams/writable:490:10)\n    at MessageStream.Writable.write (node:internal/streams/writable:494:10)\n    at TLSSocket.ondata (node:internal/streams/readable:985:22)","timestamp":"2025-01-29T11:19:36.299Z"}
+{"level":"info","message":"Server is running on port 3000","timestamp":"2025-01-29T11:20:16.299Z"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-01-29T11:20:16.919Z"}
+{"level":"info","message":"Server is running on port 3000","timestamp":"2025-01-29T11:21:05.764Z"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-01-29T11:21:06.389Z"}
+{"$clusterTime":{"clusterTime":{"$timestamp":"7465295983908225026"},"signature":{"hash":"kT759aaXyMg5PBpG+MbKDexI7E8=","keyId":{"high":1727600633,"low":20,"unsigned":false}}},"code":2,"codeName":"BadValue","level":"error","message":"Error processing request: unknown operator: $and","ok":0,"operationTime":{"$timestamp":"7465295983908225026"},"stack":"MongoServerError: unknown operator: $and\n    at Connection.onMessage (/Users/sujaypaul/Desktop/projects/netqueue_task_backend/node_modules/mongodb/src/cmap/connection.ts:449:20)\n    at MessageStream.<anonymous> (/Users/sujaypaul/Desktop/projects/netqueue_task_backend/node_modules/mongodb/src/cmap/connection.ts:241:56)\n    at MessageStream.emit (node:events:514:28)\n    at MessageStream.emit (node:domain:488:12)\n    at processIncomingData (/Users/sujaypaul/Desktop/projects/netqueue_task_backend/node_modules/mongodb/src/cmap/message_stream.ts:188:12)\n    at MessageStream._write (/Users/sujaypaul/Desktop/projects/netqueue_task_backend/node_modules/mongodb/src/cmap/message_stream.ts:69:5)\n    at writeOrBuffer (node:internal/streams/writable:556:12)\n    at _write (node:internal/streams/writable:490:10)\n    at MessageStream.Writable.write (node:internal/streams/writable:494:10)\n    at TLSSocket.ondata (node:internal/streams/readable:985:22)","timestamp":"2025-01-29T11:21:09.177Z"}
+{"level":"info","message":"Server is running on port 3000","timestamp":"2025-01-29T11:22:45.404Z"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-01-29T11:22:46.103Z"}
+{"level":"info","message":"Server is running on port 3000","timestamp":"2025-01-29T11:24:27.460Z"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-01-29T11:24:28.232Z"}
+{"level":"info","message":"Server is running on port 3000","timestamp":"2025-01-29T11:42:00.674Z"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-01-29T11:42:01.399Z"}
+{"level":"info","message":"Server is running on port 3000","timestamp":"2025-01-29T11:45:44.360Z"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-01-29T11:45:45.113Z"}
+{"level":"info","message":"Server is running on port 3000","timestamp":"2025-01-29T11:46:05.412Z"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-01-29T11:46:05.972Z"}
+{"level":"info","message":"Server is running on port 3000","timestamp":"2025-01-29T11:46:16.088Z"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-01-29T11:46:16.698Z"}
+{"level":"info","message":"Server is running on port 3000","timestamp":"2025-01-29T11:46:28.020Z"}
+{"level":"info","message":"Connected to MongoDB","timestamp":"2025-01-29T11:46:28.634Z"}
