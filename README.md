@@ -1,6 +1,3 @@
-Here's the updated version of your README:
-
----
 
 # 🏠 The Luxury Hut - Node.js Backend Server
 
@@ -11,6 +8,12 @@ Here's the updated version of your README:
 ## 🚀 About the Project
 
 **The Luxury Hut Backend Server** is a high-performance, scalable API built using **TypeScript** and **Express.js**. It efficiently manages product operations, file uploads, and logging while maintaining a modular architecture.
+
+---
+
+## 📂 Live link
+
+https://netqueue-task-backend.onrender.com
 
 ---
 
@@ -51,7 +54,7 @@ tsconfig.json           # TypeScript configuration
 ### 1️⃣ Clone the Repository
 
 ```sh
-git clone https://github.com/dev-sujay/netqueue_task_the_luxury_hut.git
+git clone https://github.com/dev-sujay/netqueue_task_backend.git
 cd netqueue_task_the_luxury_hut
 ```
 
