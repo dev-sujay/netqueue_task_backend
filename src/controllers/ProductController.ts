@@ -20,6 +20,19 @@ export async function importProductsController(
   }
 }
 
+export async function createProductController(
+  req: Request,
+  res: Response
+): Promise<void> {
+  try {
+    const product = await Product.create(req.body);
+    res.json(product);
+  } catch (error) {
+    logger.error("Error processing request:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
 export async function getProductsController(
   req: Request,
   res: Response
@@ -38,132 +51,189 @@ export async function getProductsController(
       material,
       sortBy,
       sortOrder,
-      isPublished
+      isPublished,
+      search,
     } = req.query;
 
-    const page = Number.parseInt(pageNum as string) || 1;
-    const limit = Number.parseInt(pageSize as string) || 10;
+    const { id } = req.params;
 
-    const pipeline: any[] = [];
+    if (id) {
+      const product = await Product.findById(id);
+      res.json(product);
+    } else {
+      const page = Number.parseInt(pageNum as string) || 1;
+      const limit = Number.parseInt(pageSize as string) || 10;
 
-    // Match stage for basic filters
-    const matchStage: any = {};
+      const pipeline: any[] = [];
 
-    if (isPublished) {
-      matchStage.published = isPublished === "true";
-    }
+      // Match stage for basic filters
+      const matchStage: any = {};
 
-    if (category) {
-      matchStage.categories = new RegExp(category as string, "i");
-    }
+      if (isPublished) {
+        matchStage.published = isPublished === "true";
+      }
 
-    if (minPrice || maxPrice) {
-      matchStage.regularPrice = {};
-      if (minPrice)
-        matchStage.regularPrice.$gte = Number.parseFloat(minPrice as string);
-      if (maxPrice)
-        matchStage.regularPrice.$lte = Number.parseFloat(maxPrice as string);
-    }
+      if (category) {
+        matchStage.categories = new RegExp(category as string, "i");
+      }
 
-    // Add first match stage if there are any basic filters
-    if (Object.keys(matchStage).length > 0) {
-      pipeline.push({ $match: matchStage });
-    }
+      if (minPrice || maxPrice) {
+        matchStage.regularPrice = {};
+        if (minPrice)
+          matchStage.regularPrice.$gte = Number.parseFloat(minPrice as string);
+        if (maxPrice)
+          matchStage.regularPrice.$lte = Number.parseFloat(maxPrice as string);
+      }
 
-    // Add attribute filters
-    const attributeFilters = [];
-    if (gender) {
-      attributeFilters.push({
-        $match: {
-          attributes: {
-            $elemMatch: {
-              name: "GENDER",
-              value: new RegExp(gender as string, "i"),
+      if (search) {
+        const searchRegex = new RegExp(search as string, "i");
+        matchStage.$or = [
+          { name: searchRegex },
+          { shortDescription: searchRegex },
+          { description: searchRegex },
+          { categories: searchRegex },
+          { tags: searchRegex },
+          { sku: searchRegex },
+          {
+            attributes: {
+              $elemMatch: {
+                value: searchRegex,
+              },
             },
           },
-        },
-      });
-    }
+        ];
+      }
 
-    if (condition) {
-      attributeFilters.push({
-        $match: {
-          attributes: {
-            $elemMatch: {
-              name: "CONDITION",
-              value: new RegExp(condition as string, "i"),
+      // Add first match stage if there are any basic filters
+      if (Object.keys(matchStage).length > 0) {
+        pipeline.push({ $match: matchStage });
+      }
+
+      // Add attribute filters
+      const attributeFilters = [];
+      if (gender) {
+        attributeFilters.push({
+          $match: {
+            attributes: {
+              $elemMatch: {
+                name: "GENDER",
+                value: new RegExp(gender as string, "i"),
+              },
             },
           },
-        },
-      });
-    }
+        });
+      }
 
-    if (watchBrand) {
-      attributeFilters.push({
-        $match: {
-          attributes: {
-            $elemMatch: {
-              name: "BRAND",
-              value: new RegExp(watchBrand as string, "i"),
+      if (condition) {
+        attributeFilters.push({
+          $match: {
+            attributes: {
+              $elemMatch: {
+                name: "CONDITION",
+                value: new RegExp(condition as string, "i"),
+              },
             },
           },
-        },
-      });
-    }
+        });
+      }
 
-    if (jewelryBrand) {
-      attributeFilters.push({
-        $match: {
-          attributes: {
-            $elemMatch: {
-              name: "BRAND JEWELLERY",
-              value: new RegExp(jewelryBrand as string, "i"),
+      if (watchBrand) {
+        attributeFilters.push({
+          $match: {
+            attributes: {
+              $elemMatch: {
+                name: "BRAND",
+                value: new RegExp(watchBrand as string, "i"),
+              },
             },
           },
-        },
-      });
-    }
+        });
+      }
 
-    if (material) {
-      attributeFilters.push({
-        $match: {
-          attributes: {
-            $elemMatch: {
-              name: "MATERIAL",
-              value: new RegExp(material as string, "i"),
+      if (jewelryBrand) {
+        attributeFilters.push({
+          $match: {
+            attributes: {
+              $elemMatch: {
+                name: "BRAND JEWELLERY",
+                value: new RegExp(jewelryBrand as string, "i"),
+              },
             },
           },
-        },
+        });
+      }
+
+      if (material) {
+        attributeFilters.push({
+          $match: {
+            attributes: {
+              $elemMatch: {
+                name: "MATERIAL",
+                value: new RegExp(material as string, "i"),
+              },
+            },
+          },
+        });
+      }
+
+      pipeline.push(...attributeFilters);
+
+      // Add sort stage
+      if (sortBy) {
+        pipeline.push({
+          $sort: {
+            [sortBy as string]: sortOrder === "desc" ? -1 : 1,
+          },
+        });
+      }
+
+      // Add pagination
+      pipeline.push({ $skip: (page - 1) * limit }, { $limit: limit });
+
+      // Execute the aggregation
+      const products = await Product.aggregate(pipeline);
+
+      // Get total count with the same filters but without pagination
+      const countPipeline = [...pipeline.slice(0, -2)]; // Remove skip and limit stages
+      countPipeline.push({ $count: "total" });
+      const totalResult = await Product.aggregate(countPipeline);
+      const total = totalResult[0]?.total || 0;
+
+      res.json({
+        total,
+        products,
       });
     }
+  } catch (error) {
+    logger.error("Error processing request:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
 
-    pipeline.push(...attributeFilters);
-
-    // Add sort stage
-    if (sortBy) {
-      pipeline.push({
-        $sort: {
-          [sortBy as string]: sortOrder === "desc" ? -1 : 1,
-        },
-      });
-    }
-
-    // Add pagination
-    pipeline.push({ $skip: (page - 1) * limit }, { $limit: limit });
-
-    // Execute the aggregation
-    const products = await Product.aggregate(pipeline);
-
-    // Get total count with the same filters but without pagination
-    const countPipeline = [...pipeline.slice(0, -2)]; // Remove skip and limit stages
-    countPipeline.push({ $count: "total" });
-    const totalResult = await Product.aggregate(countPipeline);
-    const total = totalResult[0]?.total || 0;
-
-    res.json({
-      total,
-      products,
+export async function updateProductController(
+  req: Request,
+  res: Response
+): Promise<void> {
+  try {
+    const { id } = req.params;
+    const updatedProduct = await Product.findByIdAndUpdate(id, req.body, {
+      new: true,
     });
+    res.json(updatedProduct);
+  } catch (error) {
+    logger.error("Error processing request:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+export async function deleteProductController(
+  req: Request,
+  res: Response
+): Promise<void> {
+  try {
+    const { id } = req.params;
+    await Product.findByIdAndDelete(id);
+    res.json({ message: "Product deleted successfully" });
   } catch (error) {
     logger.error("Error processing request:", error);
     res.status(500).json({ error: "Internal server error" });

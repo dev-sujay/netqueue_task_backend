@@ -1,5 +1,5 @@
 {
-  "name": "ecommerce-platform",
+  "name": "the-luxury-hut-backend",
   "version": "1.0.0",
   "description": "E-commerce platform with product management and search capabilities",
   "main": "dist/app.js",
