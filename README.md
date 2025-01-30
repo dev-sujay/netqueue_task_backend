@@ -51,8 +51,8 @@ tsconfig.json           # TypeScript configuration
 ### 1️⃣ Clone the Repository
 
 ```sh
-git clone https://github.com/your-username/luxury-hut-backend.git
-cd luxury-hut-backend
+git clone https://github.com/dev-sujay/netqueue_task_the_luxury_hut.git
+cd netqueue_task_the_luxury_hut
 ```
 
 ### 2️⃣ Install Dependencies
