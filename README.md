@@ -117,7 +117,7 @@ We welcome contributions! Follow these steps to contribute:
 
 ## 🔥 Author
 
-👤 **Your Name**  
+👤 Sujay Paul 
 📧 paulsujay999@gmail.com  
 🔗 [LinkedIn Profile](https://www.linkedin.com/in/dev-sujay/)
 
